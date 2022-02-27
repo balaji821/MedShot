@@ -1,8 +1,10 @@
 import googletrans
 from googletrans import Translator
+from configparser import ConfigParser
 
-translator = Translator()
-config = None
+translator: Translator = Translator()
+config: ConfigParser
+
 
 def init(cfg):
     global config
@@ -10,7 +12,7 @@ def init(cfg):
 
 
 def get_translation(text, dest):
-    return translator.translate(text, dest)
+    return translator.translate(text, dest, 'en')
 
 
 def get_lang_name(lang_code):
@@ -18,5 +20,8 @@ def get_lang_name(lang_code):
 
 
 def get_translated_message(message, chat_id):
-    lang = config.get(chat_id)
-    return get_translation(message, lang)
+    lang = config.get("LANGUAGE OPTIONS", str(chat_id))
+    return get_translation(message, 'ta').text
+
+
+# print(get_translated_message("Herb is identified as ", ""))

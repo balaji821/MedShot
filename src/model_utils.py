@@ -1,12 +1,16 @@
-from tensorflow import keras
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+from keras import Model
 from keras.preprocessing import image
+from tensorflow import keras
 import numpy as np
-import logging
 import file_utils as fu
+import logging
 
 logger = logging.getLogger("medshot")
 
-model = None
+model: Model
 img_width, img_height = 300, 300
 
 

@@ -32,7 +32,7 @@ def start(message):
     bot.send_message(message.chat.id, "Please choose a language.", reply_markup=km.get_language_selection_markup())
 
 
-@bot.callback_query_handler(func=lambda call: "predict" in call.message)
+@bot.callback_query_handler(func=lambda call: "predict" in call.message.text)
 def predict(call: types.CallbackQuery):
     logger.info("Invoked predict method from keyboard markup.")
     bot.send_message(call.message.chat.id, lang_util.get_translated_message("Please send a clear image of the plant.", call.message.chat.id))
@@ -42,10 +42,11 @@ def predict(call: types.CallbackQuery):
 def identify_plant(message: types.Message):
     download_loc = download_image(message)
     result = model.make_prediction(download_loc)
-    bot.send_message(message.chat.id, lang_util.get_translated_message("The plant is identified as "+result,message.chat.id),reply_markup=km.get_menu_markup())
+    print(result)
+    bot.send_message(message.chat.id, lang_util.get_translated_message("Herb is identified as "+str(result), message.chat.id), reply_markup=km.get_menu_markup())
 
 
-@bot.callback_query_handler(func=lambda call: "set_lang_" in call.message)
+@bot.callback_query_handler(func=lambda call: "set_lang_" in call.message.text)
 def set_language(call: types.CallbackQuery):
     lang_code = call.message[-1:-3]
     config.set("LANGUAGE OPTIONS", str(call.message.chat.id), lang_code)
