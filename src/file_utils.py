@@ -21,6 +21,14 @@ def get_language_resource_path():
     return get_resource_dir()+"LanguageResources.properties"
 
 
+def get_plantlist_path():
+    return get_resource_dir()+"scientific_names.txt"
+
+
+def get_plantname_path():
+    return get_resource_dir()+"plant_names.csv"
+
+
 def save_image(image_bytes, path):
     with open(path, "wb") as image:
         image.write(image_bytes)
