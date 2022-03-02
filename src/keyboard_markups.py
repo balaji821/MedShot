@@ -1,18 +1,24 @@
 from telebot import types
-import googletrans
+import language_util as langs
 
-menu = {"Identify a plant":"predict", "Get information on a plant":"info"}
+menu = {"Identify a plant": "predict", "Get information on a plant": "info"}
 
 
 def get_menu_markup():
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    markup = types.InlineKeyboardMarkup(row_width=1)
     for item in menu:
         markup.add(types.InlineKeyboardButton(item, callback_data=menu[item]))
     return markup
 
 
 def get_language_selection_markup():
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
-    for lang_code, lang in googletrans.LANGUAGES.items():
-        markup.add(types.InlineKeyboardButton(lang, callback_data="set_lang_"+lang_code))
+    keyboard = []
+    row = []
+    for lang_code, lang in langs.get_all_langs().items():
+        if len(row) < 5:
+            row.append(types.InlineKeyboardButton(lang, callback_data="set_lang_"+lang_code))
+        else:
+            keyboard.append(row)
+            row = []
+    markup = types.InlineKeyboardMarkup(keyboard=keyboard)
     return markup

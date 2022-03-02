@@ -32,6 +32,6 @@ def load_language_resources():
     return config
 
 
-def update_language_resources(config):
-    with open(get_language_resource_path()) as config_file:
-        config_file.write(config)
+def update_language_resources(config: cfg.ConfigParser):
+    with open(get_language_resource_path(), 'w') as config_file:
+        config.write(config_file)
