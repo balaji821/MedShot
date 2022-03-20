@@ -29,6 +29,11 @@ plants_util = Plants()
 set_lang_flag = False
 
 
+@bot.message_handler(commands=["menu"])
+def menu(message):
+    bot.send_message(message.chat.id, lang_util.get_translated_message("`|          `*__MENU__*`          |`", message.chat.id), reply_markup=km.get_menu_markup(message.chat.id), parse_mode="MarkdownV2")
+
+
 def set_lang_condition(message: Message):
     global set_lang_flag
     return set_lang_flag
@@ -55,14 +60,10 @@ def set_language(message: Message):
     menu(message)
 
 
-@bot.message_handler(commands=["menu"])
-def menu(message):
-    bot.send_message(message.chat.id, lang_util.get_translated_message("`|          `*__MENU__*`          |`", message.chat.id), reply_markup=km.get_menu_markup(message.chat.id), parse_mode="MarkdownV2")
-
-
 @bot.message_handler(commands=["start"])
 def start(message: Message):
     logger.info("New user: " + str(message.chat.id))
+    bot.send_message(message.chat.id, "Welcome!!")
     change_lang(message)
 
 
