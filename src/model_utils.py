@@ -1,4 +1,5 @@
 import os
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from keras import Model
@@ -20,13 +21,24 @@ def load_model():
     return model
 
 
-def make_prediction(image_path):
-    img = image.load_img(image_path, target_size=(img_width, img_height))
+# def make_prediction(image_path):
+#     img = image.load_img(image_path, target_size=(img_width, img_height))
+#     x = image.img_to_array(img)
+#     x = np.expand_dims(x, axis=0)
+#     images = np.vstack([x])
+#
+#     if model is None:
+#         load_model()
+#
+#     return model.predict(images)
+
+def make_prediction(img_path):
+    img = image.load_img(img_path, target_size=(300, 300))
+    img55 = image.img_to_array(img)
+    img55 /= 255.0
     x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    images = np.vstack([x])
-
-    if model is None:
-        load_model()
-
-    return model.predict(images)
+    x = x.reshape((1,) + x.shape)
+    x /= 255.0
+    prediction_user = model.predict(np.array([img55]))
+    print(prediction_user)
+    return prediction_user

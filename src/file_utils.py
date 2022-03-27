@@ -2,19 +2,23 @@ import configparser as cfg
 
 
 def get_resource_dir():
-    return "resources/"
+    return "../resources/"
 
 
 def get_images_dir():
     return get_resource_dir() + "images/"
 
 
+def get_info_dir():
+    return get_resource_dir() + "info/"
+
+
 def get_log_directory():
-    return "logs/"
+    return "../logs/"
 
 
 def get_model_path():
-    return get_resource_dir()+"model.h5"
+    return get_resource_dir()+"egs26.h5"
 
 
 def get_language_resource_path():
@@ -43,3 +47,9 @@ def load_language_resources():
 def update_language_resources(config: cfg.ConfigParser):
     with open(get_language_resource_path(), 'w') as config_file:
         config.write(config_file)
+
+
+def load_plant_props(path):
+    config = cfg.ConfigParser()
+    config.read(path)
+    return config

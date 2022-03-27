@@ -37,7 +37,16 @@ def get_translated_message(message, chat_id):
     lang = get_preferred_language(chat_id)
     if lang == 'en':
         return message
-    return get_translator(lang).translate(message)
+    translator = get_translator(lang)
+    if len(message) < 5000:
+        translated_message = translator.translate(message)
+    else:
+        translated_message: str = ""
+        for i in range(len(message)/5000):
+            batch = message[i*5000:(i+1)*5000]
+            translated_message += translator.translate(batch)
+
+    return translated_message
 
 
 def get_preferred_language(chat_id):
