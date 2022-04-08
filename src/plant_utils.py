@@ -65,3 +65,6 @@ class Plants:
     def get_info(self, common_name, lang, use_case="info"):
         sci_name = self.get_plant_sci_name_with_common_name(common_name, lang)
         return self.plant_info[sci_name][use_case]
+
+    def get_plant_image(self, sci_name):
+        return open(fu.get_plant_images_dir()+sci_name+'.jpg', 'rb')

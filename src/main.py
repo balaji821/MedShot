@@ -65,12 +65,16 @@ def set_language(message: Message):
     menu(message)
 
 
-def send_plant_info(plant, id):
+def send_plant_info(plant, id, send_plant_image):
     if plant not in plants_util.get_plant_list(lang_util.get_preferred_language(id)):
-        bot.send_message(id, lang_util.get_translated_message("Herb not recognized! Please select one from the list.", id),
+        bot.send_message(id,
+                         lang_util.get_translated_message("Herb not recognized! Please select one from the list.", id),
                          reply_markup=km.get_plant_list_markup(id))
         return
     logger.info(str(id) + " requested info on" + plant)
+    if not plant == 'None' and not send_plant_image:
+        send_pant_image(id,
+                        plants_util.get_plant_sci_name_with_common_name(plant, lang_util.get_preferred_language(id)))
     bot.send_message(id,
                      lang_util.get_translated_message(
                          plants_util.get_info(plant, lang_util.get_preferred_language(id)),
@@ -82,7 +86,7 @@ def send_plant_info(plant, id):
 def plant_info(call: CallbackQuery):
     message: Message = call.message
     plant = call.data.split("_")[1]
-    send_plant_info(plant, message.chat.id)
+    send_plant_info(plant, message.chat.id, True)
     menu(message)
 
 
@@ -122,6 +126,10 @@ def change_lang(message: Message or CallbackQuery):
     set_lang_flag = True
 
 
+def send_pant_image(id, sci_name):
+    bot.send_photo(id, plants_util.get_plant_image(sci_name))
+
+
 @bot.callback_query_handler(func=lambda call: "predict" in call.data)
 def predict(call: CallbackQuery):
     bot.send_message(call.message.chat.id,
@@ -138,7 +146,7 @@ def identify_plant(message: Message):
     if common_name != "None":
         bot.send_message(message.chat.id, lang_util.get_translated_message(
             "Herb is identified as " + common_name + "(" + sci_name + ")", message.chat.id))
-    send_plant_info(common_name, message.chat.id)
+    send_plant_info(common_name, message.chat.id, False)
 
 
 @bot.message_handler(content_types=["document"])
@@ -150,7 +158,7 @@ def document_error(message: Message):
 
 
 def download_image(message: Message):
-    image_path = fu.get_images_dir() + str(message.chat.id) + ".jpg"
+    image_path = fu.get_test_images_dir() + str(message.chat.id) + ".jpg"
     logger.info("Downloading image: " + image_path)
     file = bot.get_file(message.photo[-1].file_id)
     image_bytes = bot.download_file(file.file_path)

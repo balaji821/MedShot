@@ -36,9 +36,6 @@ def make_prediction(img_path):
     img = image.load_img(img_path, target_size=(300, 300))
     img55 = image.img_to_array(img)
     img55 /= 255.0
-    x = image.img_to_array(img)
-    x = x.reshape((1,) + x.shape)
-    x /= 255.0
     prediction_user = model.predict(np.array([img55]))
     print(prediction_user)
     return prediction_user

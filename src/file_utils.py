@@ -5,8 +5,12 @@ def get_resource_dir():
     return "../resources/"
 
 
-def get_images_dir():
-    return get_resource_dir() + "images/"
+def get_test_images_dir():
+    return get_resource_dir() + "test_images/"
+
+
+def get_plant_images_dir():
+    return get_resource_dir() + "plant_images/"
 
 
 def get_info_dir():
