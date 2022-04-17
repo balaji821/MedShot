@@ -1,0 +1,8 @@
+.idea
+lib
+*/*.h5
+*.iml
+*.log
+resources/test_images
+resources/plant_images
+src/*.pyc
