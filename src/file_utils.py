@@ -2,7 +2,7 @@ import configparser as cfg
 
 
 def get_resource_dir():
-    return "../resources/"
+    return "resources/"
 
 
 def get_test_images_dir():
@@ -18,11 +18,11 @@ def get_info_dir():
 
 
 def get_log_directory():
-    return "../logs/"
+    return "logs/"
 
 
 def get_model_path():
-    return get_resource_dir()+"egs26.h5"
+    return get_resource_dir()+"model.h5"
 
 
 def get_language_resource_path():
