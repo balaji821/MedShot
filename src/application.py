@@ -16,7 +16,8 @@ logging.basicConfig(
 logger = logging.getLogger("medshot")
 
 TOKEN = "5281537388:AAEswK-zOewo59LQVY28jah4_varSgwvAUA"
-bot = telebot.TeleBot(token=TOKEN)
+application = telebot.TeleBot(token=TOKEN)
+bot = application
 
 logger.info("Loading language resources...")
 config = fu.load_language_resources()
@@ -171,4 +172,4 @@ def download_image(message: Message):
 
 
 print("Bot started.")
-bot.infinity_polling()
+application.infinity_polling()
