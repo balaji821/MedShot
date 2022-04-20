@@ -21,7 +21,6 @@ def load_model(redownload, url):
     path = fu.get_model_path()
     if (not os.path.exists(path)) or redownload:
         download.download(url)
-        os.remove('model.download')
     model = keras.models.load_model(path)
     return model
 
