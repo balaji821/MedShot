@@ -1,10 +1,10 @@
 import telebot
 import logging
-import file_utils as fu
-import keyboard_markups as km
-import model_utils as model
-import language_util as lang_util
-from plant_utils import Plants
+import src.file_utils as fu
+import src.keyboard_markups as km
+import src.model_utils as model
+import src.language_util as lang_util
+from src.plant_utils import Plants
 from telebot.types import Message, CallbackQuery, ReplyKeyboardRemove
 
 logging.basicConfig(
