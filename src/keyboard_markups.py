@@ -1,6 +1,6 @@
 from telebot.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton, InlineKeyboardButton
-import language_util as langs
-from plant_utils import Plants
+import src.language_util as langs
+from src.plant_utils import Plants
 
 menu = {"Identify a herb": "predict", "Get information on a herb": "info", "Change Language": "change_lang"}
 

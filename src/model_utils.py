@@ -6,9 +6,9 @@ from keras import Model
 from keras.preprocessing import image
 from tensorflow import keras
 import numpy as np
-import file_utils as fu
+import src.file_utils as fu
 import logging
-import download
+import src.download
 
 logger = logging.getLogger("medshot")
 
