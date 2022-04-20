@@ -8,6 +8,7 @@ from tensorflow import keras
 import numpy as np
 import file_utils as fu
 import logging
+import download
 
 logger = logging.getLogger("medshot")
 
@@ -15,9 +16,13 @@ model: Model
 img_width, img_height = 300, 300
 
 
-def load_model():
+def load_model(redownload, url):
     global model
-    model = keras.models.load_model(fu.get_model_path())
+    path = fu.get_model_path()
+    if (not os.path.exists(path)) or redownload:
+        download.download(url)
+        os.remove('model.download')
+    model = keras.models.load_model(path)
     return model
 
 

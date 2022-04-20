@@ -23,7 +23,10 @@ config = fu.load_language_resources()
 logger.info("Initializing language utils...")
 lang_util.init(config)
 logger.info("Loading model...")
-model.load_model()
+download_model = (config.get("MODEL-CONFIG", 'download') == 'true')
+download_url = config.get("MODEL-CONFIG", 'url')
+logger.info("Download model flag: "+str(download_model))
+model.load_model(download_model, download_url)
 plants_util = Plants.get_instance()
 
 set_lang_flag = False

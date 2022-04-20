@@ -1,6 +1,9 @@
 import file_utils as fu
 import pandas
 import os
+import logging
+
+logger = logging.getLogger("medshot")
 
 
 class Plants:
@@ -25,7 +28,6 @@ class Plants:
         sci_names = list(self.plant_names.index)
         info = fu.get_info_dir()
         for sci in sci_names:
-            print(sci)
             if not os.path.exists(info+sci+"/medicinal_uses.properties"):
                 continue
             plant_props = dict(fu.load_plant_props(info+sci+"/medicinal_uses.properties").items("MEDICINAL-USES"))
@@ -37,7 +39,8 @@ class Plants:
                     plant_uses[key] = f.read()
             plant_uses["uses"] = uses
             self.plant_info[sci] = plant_uses
-        print(self.plant_info)
+            logger.info("Loaded ["+sci+"]")
+            print("Loaded ["+sci+"]")
 
     def get_lang(self, lang):
         if lang not in self.plant_names.columns:
