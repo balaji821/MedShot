@@ -8,7 +8,7 @@ from tensorflow import keras
 import numpy as np
 import src.file_utils as fu
 import logging
-import src.download
+import src.download as download
 
 logger = logging.getLogger("medshot")
 
