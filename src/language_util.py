@@ -11,8 +11,8 @@ def init(cfg):
     global lang_code_map
     global lang_list
     config = cfg
-    lang_list = GoogleTranslator.get_supported_languages()
-    lang_code_map = GoogleTranslator.get_supported_languages(as_dict=True)
+    lang_list = GoogleTranslator().get_supported_languages()
+    lang_code_map = GoogleTranslator().get_supported_languages(as_dict=True)
     for lang in lang_list:
         lang_code_map[lang_code_map[lang]] = lang
 
