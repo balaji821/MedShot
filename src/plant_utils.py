@@ -33,7 +33,7 @@ class Plants:
             uses = []
             for key in plant_props:
                 uses.append(key)
-                with open("../"+plant_props[key], encoding="utf-8") as f:
+                with open(plant_props[key], encoding="utf-8") as f:
                     plant_uses[key] = f.read()
             plant_uses["uses"] = uses
             self.plant_info[sci] = plant_uses
