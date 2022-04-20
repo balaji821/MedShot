@@ -1,7 +1,5 @@
 .idea
 lib
-*/*.h5
 *.iml
-*.log
-resources/test_images/*
-src/*.pyc
+*.pyc
+resources/model.h5
