@@ -37,6 +37,10 @@ def get_plantname_path():
     return get_resource_dir()+"plant_names.csv"
 
 
+def get_audio_path():
+    return get_resource_dir()+"audio/"
+
+
 def save_image(image_bytes, path):
     with open(path, "wb") as image:
         image.write(image_bytes)

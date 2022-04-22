@@ -1,8 +1,12 @@
 from telebot.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton, InlineKeyboardButton
 import src.language_util as langs
 from src.plant_utils import Plants
+from src.disease_utils import Disease
 
-menu = {"Identify a herb": "predict", "Get information on a herb": "info", "Change Language": "change_lang"}
+menu = {"Identify a herb": "predict",
+        "Find medication for a disease": "medication",
+        "Get information on a herb": "info",
+        "Change Language": "change_lang"}
 
 
 def get_menu_markup(chat_id):
@@ -40,8 +44,33 @@ def get_plant_info_markup(plant_name, id):
 
     i = 0
     while i < len(uses) - 1:
-        markup.add(InlineKeyboardButton(langs.get_translated_message(uses[i].replace("_", " "), id), callback_data="use;"+plant_name+";"+uses[i]),
-                   InlineKeyboardButton(langs.get_translated_message(uses[i + 1].replace("_", " "),id), callback_data="use;"+plant_name+";"+uses[i+1])
+        markup.add(InlineKeyboardButton(langs.get_translated_message(uses[i].replace("_", " "), id),
+                                        callback_data="use;" + plant_name + ";" + uses[i]),
+                   InlineKeyboardButton(langs.get_translated_message(uses[i + 1].replace("_", " "), id),
+                                        callback_data="use;" + plant_name + ";" + uses[i + 1])
                    )
         i += 2
+    return markup
+
+
+def get_disease_markup(id):
+    markup = ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+    lang = langs.get_preferred_language(id)
+    for disease in Disease.get_instance().disease_to_plant_map:
+        if lang == "en":
+            markup.add(KeyboardButton(langs.get_translated_message(disease, id)))
+        else:
+            markup.add(KeyboardButton(langs.get_translated_message(disease, id) + "/" + disease))
+    return markup
+
+
+def get_medication_markup(disease: str, id):
+    markup = InlineKeyboardMarkup(row_width=1)
+    lang = langs.get_preferred_language(id)
+    plant_list = Disease.get_instance().disease_to_plant_map[disease]
+
+    for plant in plant_list:
+        common_name = Plants.get_instance().get_plant_common_name(plant, lang)
+        markup.add(InlineKeyboardButton(langs.get_translated_message(common_name, id),
+                                        callback_data="use;" + common_name + ";" + disease))
     return markup
