@@ -179,6 +179,8 @@ def info_command(message: Message or CallbackQuery):
     application.send_message(message.chat.id,
                              lang_util.get_translated_message("Select from the list of available herbs",message.chat.id),
                              reply_markup=km.get_plant_list_markup(message.chat.id))
+    global plant_flag
+    plant_flag = True
 
 
 @application.callback_query_handler(func=lambda call: call.data == "medication")
