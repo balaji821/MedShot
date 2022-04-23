@@ -165,7 +165,7 @@ def send_plant_info(plant, id, send_plant_image):
                     lang_util.get_translated_message(plant, id) + \
                     "__*🍃`       ‎`\n"
     application.send_message(id, plant_heading, parse_mode="MarkdownV2")
-    if not plant == 'None' and not send_plant_image:
+    if not plant == 'None' and send_plant_image:
         send_pant_image(id,
                         plants_util.get_plant_sci_name_with_common_name(plant, lang_util.get_preferred_language(id)))
     message_to_send = lang_util.get_translated_message(
