@@ -175,9 +175,11 @@ def send_plant_info(plant, id, send_plant_image):
 
     application.send_message(id, info_heading, parse_mode="MarkdownV2")
     application.send_message(id, message_to_send)
-    application.send_audio(id, to_speech(message_to_send, id, language=lang_util.get_preferred_language(id)))
+    application.send_audio(id,
+                           to_speech(message_to_send, id, language=lang_util.get_preferred_language(id)),
+                           reply_markup=ReplyKeyboardRemove())
     application.send_message(id, "`|          `*__" + uses_heading + "__*`          |`\n",
-                             reply_markup=km.get_plant_info_markup(plant, id))
+                             reply_markup=km.get_plant_info_markup(plant, id), parse_mode="MarkdownV2")
 
 
 @application.callback_query_handler(func=lambda call: "use;" in call.data)
