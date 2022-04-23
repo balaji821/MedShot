@@ -113,7 +113,7 @@ def get_medication(message: Message):
                                      message.chat.id),
                                  reply_markup=km.get_disease_markup(message.chat.id))
         return
-    to_delete: Message = application.send_message(message.chat.id, "‎", reply_markup=ReplyKeyboardRemove())
+    to_delete: Message = application.send_message(message.chat.id, "__________", reply_markup=ReplyKeyboardRemove())
     application.delete_message(to_delete.chat.id, to_delete.id)
     disease = disease.split("/")[1]
     application.send_message(message.chat.id,
