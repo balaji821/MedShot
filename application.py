@@ -194,7 +194,7 @@ def plant_use_info(call: CallbackQuery):
     use_case = unquote_plus(use_case)
     message = plants_util.get_info(common_name, lang_util.get_preferred_language(call.message.chat.id), use_case)
     message = lang_util.get_translated_message(message, call.message.chat.id)
-    use_heading = "`          `__" + lang_util.get_translated_message(use_case, call.message.chat.id)\
+    use_heading = "`          `__" + lang_util.get_translated_message(use_case, call.message.chat.id) \
         .replace("-", "\-").replace("_", " ") + "__`       ‎`\n"
     application.send_message(call.message.chat.id, use_heading, parse_mode="MarkdownV2")
     application.send_message(call.message.chat.id, message)
@@ -269,9 +269,12 @@ def identify_plant(message: Message):
     logger.info("Prediction made by " + str(message.chat.id) + ": " + str(result))
     sci_name = plants_util.get_plant_sci_name(result[0])
     common_name = plants_util.get_plant_common_name(sci_name, lang_util.get_preferred_language(message.chat.id))
-    if common_name != "None":
+    if common_name == "None":
         application.send_message(message.chat.id, lang_util.get_translated_message(
-            "Herb is identified as " + common_name + "(" + sci_name + ")", message.chat.id))
+            "No plants found in the image. Please send a valid/clearer picture.", message.chat.id))
+        return
+    application.send_message(message.chat.id, lang_util.get_translated_message(
+        "Herb is identified as " + common_name + "(" + sci_name + ")", message.chat.id))
     send_plant_info(common_name, message.chat.id, False)
 
 
