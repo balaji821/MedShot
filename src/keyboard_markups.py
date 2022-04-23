@@ -2,6 +2,7 @@ from telebot.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardBut
 import src.language_util as langs
 from src.plant_utils import Plants
 from src.disease_utils import Disease
+from urllib.parse import quote_plus
 
 menu = {"1. Identify a herb ": "predict",
         "2. Find medication for disease ": "medication",
@@ -53,9 +54,9 @@ def get_plant_info_markup(plant_name, id):
     i = 0
     while i < len(uses) - 1:
         markup.add(InlineKeyboardButton(langs.get_translated_message(uses[i].replace("_", " "), id),
-                                        callback_data="use;" + plant_name + ";" + uses[i].replace("-", "+")),
+                                        callback_data="use;" + plant_name + ";" + quote_plus(uses[i])),
                    InlineKeyboardButton(langs.get_translated_message(uses[i + 1].replace("_", " "), id),
-                                        callback_data="use;" + plant_name + ";" + uses[i + 1])
+                                        callback_data="use;" + plant_name + ";" + quote_plus(uses[i + 1]))
                    )
         i += 2
     return markup

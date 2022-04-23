@@ -8,6 +8,7 @@ from src.plant_utils import Plants
 from src.disease_utils import Disease
 from telebot.types import Message, CallbackQuery, ReplyKeyboardRemove
 from gtts import gTTS
+from urllib.parse import unquote_plus
 
 logging.basicConfig(
     filename=fu.get_log_directory() + "out.log",
@@ -186,7 +187,7 @@ def send_plant_info(plant, id, send_plant_image):
 def plant_use_info(call: CallbackQuery):
     common_name = call.data.split(";")[1]
     use_case = call.data.split(";")[2]
-    use_case = use_case.replace("+","-")
+    use_case = unquote_plus(use_case)
     message = plants_util.get_info(common_name, lang_util.get_preferred_language(call.message.chat.id), use_case)
     message = lang_util.get_translated_message(message, call.message.chat.id)
     use_heading = "`          `__" + lang_util.get_translated_message(use_case,call.message.chat.id) +"__`       ‎`\n"
