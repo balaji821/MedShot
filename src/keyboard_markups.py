@@ -10,7 +10,7 @@ menu = {"1. Identify a herb ": "predict",
 
 emojis = {"1. Identify a herb ": "📸",
           "2. Find medication for disease ": "🔍",
-          "3. Get information on a herb ": "🌱",
+          "3. Get information on a herb ": "🌿",
           "4. Change Language ": "🗣"}
 
 
