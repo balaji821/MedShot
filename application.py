@@ -118,11 +118,9 @@ def get_medication(message: Message):
     plant_flag = False
 
 
-@application.callback_query_handler(func=get_plant_flag)
-def plant_info(call: CallbackQuery):
-    message: Message = call.message
-    plant = call.data.split("_")[1]
-    send_plant_info(plant, message.chat.id, True)
+@application.message_handler(func=get_plant_flag)
+def plant_info(message: Message):
+    send_plant_info(message.text, message.chat.id, True)
     menu(message)
 
     global set_lang_flag
