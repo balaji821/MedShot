@@ -160,7 +160,7 @@ def send_plant_info(plant, id, send_plant_image):
     application.send_message(id,
                              "`          `🍃*__" +
                              lang_util.get_translated_message(plant, id) +
-                             "__*🍃`          ‎`", parse_mode="MarkdownV2")
+                             "__*🍃`       ‎`", parse_mode="MarkdownV2")
     if not plant == 'None' and not send_plant_image:
         send_pant_image(id,
                         plants_util.get_plant_sci_name_with_common_name(plant, lang_util.get_preferred_language(id)))
@@ -170,14 +170,15 @@ def send_plant_info(plant, id, send_plant_image):
     uses_heading = lang_util.get_translated_message("Uses", id)
     info_heading = "`          `👇🏻*__" + \
                    lang_util.get_translated_message("Information", id) + \
-                   "__*👇🏻`          .`\n" + ("\\-\\-" * 25)
+                   "__*👇🏻`       ‎`\n" + ("\\-\\-" * 25)
 
     application.send_message(id, info_heading, parse_mode="MarkdownV2")
     application.send_message(id, message_to_send)
     application.send_audio(id,
                            to_speech(message_to_send, id, language=lang_util.get_preferred_language(id)),
                            reply_markup=ReplyKeyboardRemove())
-    application.send_message(id, "`          `__" + uses_heading + "__`          ‎`\n",
+    application.send_message(id, "`          `__" + uses_heading +
+                                 "__`       ‎`\n",
                              reply_markup=km.get_plant_info_markup(plant, id), parse_mode="MarkdownV2")
 
 
