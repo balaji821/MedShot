@@ -3,16 +3,16 @@ import src.language_util as langs
 from src.plant_utils import Plants
 from src.disease_utils import Disease
 
-menu = {"Identify a herb": "predict",
-        "Find medication for a disease": "medication",
-        "Get information on a herb": "info",
-        "Change Language": "change_lang"}
+menu = {"1. Identify a herb 📸": "predict",
+        "2. Find medication for a disease 🔍": "medication",
+        "3. Get information on a herb 🌱": "info",
+        "4. Change Language 🗣": "change_lang"}
 
 
 def get_menu_markup(chat_id):
     markup = InlineKeyboardMarkup(row_width=1)
     for item in menu:
-        markup.add(InlineKeyboardButton(langs.get_translated_message(item, chat_id), callback_data=menu[item]))
+        markup.add(InlineKeyboardButton("*"+langs.get_translated_message(item, chat_id)+"*", callback_data=menu[item]), parse_mode="MarkdownV2")
     return markup
 
 

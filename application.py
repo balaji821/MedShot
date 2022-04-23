@@ -40,7 +40,7 @@ medication_flag = False
 def menu(message):
     application.send_message(message.chat.id,
                              "`|          `*__☘" +
-                             lang_util.get_translated_message("MENU", message.chat.id) +
+                             lang_util.get_translated_message("### MENU", message.chat.id) +
                              "☘__*`          |`",
                              reply_markup=km.get_menu_markup(message.chat.id), parse_mode="MarkdownV2")
 
@@ -185,6 +185,8 @@ def send_pant_image(id, sci_name):
 
 @application.callback_query_handler(func=lambda call: "predict" in call.data)
 def predict(call: CallbackQuery):
+    application.send_message(call.message.chat.id,
+                             lang_util.get_translated_message("__Identify a herb__", call.message.chat.id), parse_mode="MarkdownV2")
     application.send_message(call.message.chat.id,
                              lang_util.get_translated_message("Please send a photograph of the plant.", call.message.chat.id))
 
