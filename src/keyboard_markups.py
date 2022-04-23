@@ -12,7 +12,7 @@ menu = {"1. Identify a herb 📸": "predict",
 def get_menu_markup(chat_id):
     markup = InlineKeyboardMarkup(row_width=1)
     for item in menu:
-        markup.add(InlineKeyboardButton("*"+langs.get_translated_message(item, chat_id)+"*", callback_data=menu[item]), parse_mode="MarkdownV2")
+        markup.add(InlineKeyboardButton(langs.get_translated_message(item, chat_id), callback_data=menu[item]))
     return markup
 
 
