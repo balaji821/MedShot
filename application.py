@@ -106,16 +106,17 @@ def set_language(message: Message):
 @application.message_handler(func=get_medication_flag)
 def get_medication(message: Message):
     disease = message.text
-    if "/" not in disease or disease.split("/")[1] not in disease_util.disease_to_plant_map:
-        application.send_message(message.chat.id,
-                                 lang_util.get_translated_message(
-                                     "Disease not recognized! Please select one from the list.",
-                                     message.chat.id),
-                                 reply_markup=km.get_disease_markup(message.chat.id))
-        return
+    if not lang_util.get_preferred_language(message.chat.id) == "en":
+        if "/" not in disease or disease.split("/")[1] not in disease_util.disease_to_plant_map:
+            application.send_message(message.chat.id,
+                                     lang_util.get_translated_message(
+                                         "Disease not recognized! Please select one from the list.",
+                                         message.chat.id),
+                                     reply_markup=km.get_disease_markup(message.chat.id))
+            return
+        disease = disease.split("/")[1]
     to_delete: Message = application.send_message(message.chat.id, "__________", reply_markup=ReplyKeyboardRemove())
     application.delete_message(to_delete.chat.id, to_delete.id)
-    disease = disease.split("/")[1]
     application.send_message(message.chat.id,
                              lang_util.get_translated_message(" Herbs that can cure " + disease,
                                                               message.chat.id),
