@@ -8,12 +8,16 @@ menu = {"1. Identify a herb 📸": "predict",
         "3. Get information on a herb 🌱": "info",
         "4. Change Language 🗣": "change_lang"}
 
+emojis = {"1. Identify a herb ": "📸",
+          "2. Find medication for a disease ": "🔍",
+          "3. Get information on a herb ": "🌱",
+          "4. Change Language ": "🗣"}
+
 
 def get_menu_markup(chat_id):
     markup = InlineKeyboardMarkup(row_width=1)
     for item in menu:
-        message = langs.get_translated_message(item, chat_id)
-        print(message)
+        message = langs.get_translated_message(item, chat_id)+emojis[item]
         markup.add(InlineKeyboardButton(message, callback_data=menu[item]))
     return markup
 
