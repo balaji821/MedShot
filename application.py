@@ -170,10 +170,10 @@ def send_plant_info(plant, id, send_plant_image):
         id)
     uses_heading = "`          `👇🏻__" + \
                    lang_util.get_translated_message("Uses", id) + \
-                   "__*👇🏻`       ‎`\n"
+                   "__👇🏻`       ‎`\n"
     info_heading = "`          `👇🏻__" + \
                    lang_util.get_translated_message("Information", id) + \
-                   "__*👇🏻`       ‎`\n" + ("\\-\\-" * 21)
+                   "__👇🏻`       ‎`\n" + ("\\-\\-" * 21)
 
     application.send_message(id, info_heading, parse_mode="MarkdownV2")
     application.send_message(id, message_to_send)
