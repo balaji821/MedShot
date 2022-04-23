@@ -27,7 +27,7 @@ lang_util.init(config)
 logger.info("Loading model...")
 download_model = (config.get("MODEL-CONFIG", 'download') == 'true')
 download_url = config.get("MODEL-CONFIG", 'url')
-logger.info("Download model flag: "+str(download_model))
+logger.info("Download model flag: " + str(download_model))
 model.load_model(download_model, download_url)
 plants_util = Plants.get_instance()
 disease_util = Disease.get_instance()
@@ -35,6 +35,13 @@ disease_util = Disease.get_instance()
 set_lang_flag = False
 medication_flag = False
 plant_flag = False
+
+
+@application.message_handler(commands=["start"])
+def start(message: Message):
+    logger.info("New user: " + str(message.chat.id))
+    application.send_message(message.chat.id, "Welcome!!")
+    change_lang(message)
 
 
 @application.message_handler(commands=["menu"])
@@ -62,7 +69,7 @@ def get_plant_flag(message: Message):
 
 
 def to_speech(text, chat_id, language='en'):
-    output_path = fu.get_audio_path()+str(chat_id)+".mp3"
+    output_path = fu.get_audio_path() + str(chat_id) + ".mp3"
     output = gTTS(text=text, lang=language, slow=False)
     output.save(output_path)
     return open(output_path, 'rb')
@@ -90,7 +97,7 @@ def set_language(message: Message):
 
     application.send_message(message.chat.id,
                              lang_util.get_translated_message("Language set to " + lang_util.get_lang_name(lang_code),
-                                                      message.chat.id),
+                                                              message.chat.id),
                              reply_markup=ReplyKeyboardRemove(selective=False))
     menu(message)
 
@@ -100,14 +107,15 @@ def get_medication(message: Message):
     disease = message.text
     if "/" not in disease or disease.split("/")[1] not in disease_util.disease_to_plant_map:
         application.send_message(message.chat.id,
-                                 lang_util.get_translated_message("Disease not recognized! Please select one from the list.",
-                                                          message.chat.id),
+                                 lang_util.get_translated_message(
+                                     "Disease not recognized! Please select one from the list.",
+                                     message.chat.id),
                                  reply_markup=km.get_disease_markup(message.chat.id))
         return
     disease = disease.split("/")[1]
     application.send_message(message.chat.id,
-                             lang_util.get_translated_message(" Herbs that can cure "+disease,
-                                                      message.chat.id),
+                             lang_util.get_translated_message(" Herbs that can cure " + disease,
+                                                              message.chat.id),
                              reply_markup=km.get_medication_markup(disease, message.chat.id))
 
     global set_lang_flag
@@ -124,12 +132,13 @@ def plant_info(message: Message):
     print(plant_name)
     if '/' not in plant_name:
         application.send_message(id,
-                                 lang_util.get_translated_message("Herb not found! Please select one from the list.", id),
+                                 lang_util.get_translated_message("Herb not found! Please select one from the list.",
+                                                                  id),
                                  reply_markup=km.get_plant_list_markup(id))
         return
     plant_name = plant_name.split("/")[1]
     print(plant_name)
-    plant_name = plants_util.get_plant_common_name(plant_name,lang_util.get_preferred_language(message.chat.id))
+    plant_name = plants_util.get_plant_common_name(plant_name, lang_util.get_preferred_language(message.chat.id))
     send_plant_info(plant_name, message.chat.id, True)
     menu(message)
 
@@ -144,7 +153,8 @@ def plant_info(message: Message):
 def send_plant_info(plant, id, send_plant_image):
     if plant not in plants_util.get_plant_list(lang_util.get_preferred_language(id)):
         application.send_message(id,
-                                 lang_util.get_translated_message("Herb not found! Please select one from the list.", id),
+                                 lang_util.get_translated_message("Herb not found! Please select one from the list.",
+                                                                  id),
                                  reply_markup=km.get_plant_list_markup(id))
         return
     logger.info(str(id) + " requested info on" + plant)
@@ -158,10 +168,13 @@ def send_plant_info(plant, id, send_plant_image):
     message_to_send = lang_util.get_translated_message(
         plants_util.get_info(plant, lang_util.get_preferred_language(id)),
         id)
-    information_heading = lang_util.get_translated_message("Information", id)
     uses_heading = lang_util.get_translated_message("Uses", id)
-    message_to_send = "`|          `👇🏻*__" + information_heading + "__*👇🏻`          |`\n" + ("__"*20) + message_to_send
-    application.send_message(id, message_to_send, parse_mode="MarkdownV2")
+    info_heading = "`|          `👇🏻*__" + \
+                   lang_util.get_translated_message("Information", id) + \
+                   "__*👇🏻`          |`\n" + ("\\-\\-" * 20)
+
+    application.send_message(id, info_heading, parse_mode="MarkdownV2")
+    application.send_message(id, message_to_send)
     application.send_audio(id, to_speech(message_to_send, id, language=lang_util.get_preferred_language(id)))
     application.send_message(id, "`|          `*__" + uses_heading + "__*`          |`\n",
                              reply_markup=km.get_plant_info_markup(plant, id))
@@ -174,15 +187,9 @@ def plant_use_info(call: CallbackQuery):
     message = plants_util.get_info(common_name, lang_util.get_preferred_language(call.message.chat.id), use_case)
     message = lang_util.get_translated_message(message, call.message.chat.id)
     application.send_audio(call.message.chat.id, to_speech(message, call.message.chat.id,
-                                                           language=lang_util.get_preferred_language(call.message.chat.id)))
+                                                           language=lang_util.get_preferred_language(
+                                                               call.message.chat.id)))
     application.send_message(call.message.chat.id, message)
-
-
-@application.message_handler(commands=["start"])
-def start(message: Message):
-    logger.info("New user: " + str(message.chat.id))
-    application.send_message(message.chat.id, "Welcome!!")
-    change_lang(message)
 
 
 @application.callback_query_handler(func=lambda call: call.data == "info")
@@ -194,7 +201,8 @@ def info_command(message: Message or CallbackQuery):
                              lang_util.get_translated_message("__Get information on a herb__", message.chat.id),
                              parse_mode="MarkdownV2")
     application.send_message(message.chat.id,
-                             lang_util.get_translated_message("Select from the list of herbs given below", message.chat.id),
+                             lang_util.get_translated_message("Select from the list of herbs given below",
+                                                              message.chat.id),
                              reply_markup=km.get_plant_list_markup(message.chat.id))
     global plant_flag
     plant_flag = True
@@ -236,9 +244,11 @@ def send_pant_image(id, sci_name):
 @application.callback_query_handler(func=lambda call: "predict" in call.data)
 def predict(call: CallbackQuery):
     application.send_message(call.message.chat.id,
-                             lang_util.get_translated_message("__Identify a herb__", call.message.chat.id), parse_mode="MarkdownV2")
+                             lang_util.get_translated_message("__Identify a herb__", call.message.chat.id),
+                             parse_mode="MarkdownV2")
     application.send_message(call.message.chat.id,
-                             lang_util.get_translated_message("Please send a photograph of the plant.", call.message.chat.id))
+                             lang_util.get_translated_message("Please send a photograph of the plant.",
+                                                              call.message.chat.id))
 
 
 @application.message_handler(content_types=["photo"])
