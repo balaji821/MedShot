@@ -34,6 +34,7 @@ disease_util = Disease.get_instance()
 
 set_lang_flag = False
 medication_flag = False
+plant_flag = False
 
 
 @application.message_handler(commands=["menu"])
@@ -45,12 +46,17 @@ def menu(message):
                              reply_markup=km.get_menu_markup(message.chat.id), parse_mode="MarkdownV2")
 
 
-def set_lang_condition(message: Message):
+def get_lang_condition(message: Message):
     global set_lang_flag
     return set_lang_flag
 
 
-def set_medication_flag(message: Message):
+def get_medication_flag(message: Message):
+    global medication_flag
+    return medication_flag
+
+
+def get_plant_flag(message: Message):
     global medication_flag
     return medication_flag
 
@@ -62,7 +68,7 @@ def to_speech(text, chat_id, language='en'):
     return open(output_path, 'rb')
 
 
-@application.message_handler(func=set_lang_condition)
+@application.message_handler(func=get_lang_condition)
 def set_language(message: Message):
     if message.text not in lang_util.get_all_langs():
         application.send_message(message.chat.id, "Language not recognized! Please select one from the list.",
@@ -76,7 +82,11 @@ def set_language(message: Message):
     fu.update_language_resources(config)
 
     global set_lang_flag
+    global medication_flag
+    global plant_flag
     set_lang_flag = False
+    medication_flag = False
+    plant_flag = False
 
     application.send_message(message.chat.id,
                              lang_util.get_translated_message("Language set to " + lang_util.get_lang_name(lang_code),
@@ -85,7 +95,7 @@ def set_language(message: Message):
     menu(message)
 
 
-@application.message_handler(func=set_medication_flag)
+@application.message_handler(func=get_medication_flag)
 def get_medication(message: Message):
     disease = message.text
     if "/" not in disease or disease.split("/")[1] not in disease_util.disease_to_plant_map:
@@ -101,7 +111,26 @@ def get_medication(message: Message):
                              reply_markup=km.get_medication_markup(disease, message.chat.id))
 
     global set_lang_flag
+    global medication_flag
+    global plant_flag
     set_lang_flag = False
+    medication_flag = False
+    plant_flag = False
+
+
+@application.callback_query_handler(func=get_plant_flag)
+def plant_info(call: CallbackQuery):
+    message: Message = call.message
+    plant = call.data.split("_")[1]
+    send_plant_info(plant, message.chat.id, True)
+    menu(message)
+
+    global set_lang_flag
+    global medication_flag
+    global plant_flag
+    set_lang_flag = False
+    medication_flag = False
+    plant_flag = False
 
 
 def send_plant_info(plant, id, send_plant_image):
@@ -119,14 +148,6 @@ def send_plant_info(plant, id, send_plant_image):
         id)
     application.send_audio(id, to_speech(message_to_send, id, language=lang_util.get_preferred_language(id)))
     application.send_message(id, message_to_send, reply_markup=km.get_plant_info_markup(plant, id))
-
-
-@application.callback_query_handler(func=lambda call: "info_" in call.data)
-def plant_info(call: CallbackQuery):
-    message: Message = call.message
-    plant = call.data.split("_")[1]
-    send_plant_info(plant, message.chat.id, True)
-    menu(message)
 
 
 @application.callback_query_handler(func=lambda call: "use;" in call.data)
@@ -155,7 +176,8 @@ def info_command(message: Message or CallbackQuery):
     application.send_message(message.chat.id,
                              lang_util.get_translated_message("__Get information on a herb__", message.chat.id),
                              parse_mode="MarkdownV2")
-    application.send_message(message.chat.id, "Select from the list of available herbs",
+    application.send_message(message.chat.id,
+                             lang_util.get_translated_message("Select from the list of available herbs",message.chat.id),
                              reply_markup=km.get_plant_list_markup(message.chat.id))
 
 

@@ -30,12 +30,12 @@ def get_language_selection_markup():
 
 
 def get_plant_list_markup(id):
-    markup = InlineKeyboardMarkup(row_width=1)
+    markup = ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
     lang = langs.get_preferred_language(id)
     for plant in Plants.get_instance().get_plant_list(lang):
         if plant == "None":
             continue
-        markup.add(InlineKeyboardButton(langs.get_translated_message(plant, id), callback_data="info_" + plant))
+        markup.add(KeyboardButton(langs.get_translated_message(plant, id)))
     return markup
 
 
