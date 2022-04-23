@@ -153,7 +153,7 @@ def info_command(message: Message or CallbackQuery):
     if type(message) is CallbackQuery:
         message = message.message
     application.send_message(message.chat.id,
-                             lang_util.get_translated_message("**Get information on a herb**", message.chat.id),
+                             lang_util.get_translated_message("__Get information on a herb__", message.chat.id),
                              parse_mode="MarkdownV2")
     application.send_message(message.chat.id, "Select from the list of available herbs",
                              reply_markup=km.get_plant_list_markup(message.chat.id))
@@ -165,7 +165,7 @@ def get_medication(message: Message or CallbackQuery):
     if type(message) is CallbackQuery:
         message = message.message
     application.send_message(message.chat.id,
-                             lang_util.get_translated_message("**Find medication for a disease**", message.chat.id),
+                             lang_util.get_translated_message("__Find medication for a disease__", message.chat.id),
                              parse_mode="MarkdownV2")
     application.send_message(message.chat.id, lang_util.get_translated_message("Choose the disease", message.chat.id),
                              reply_markup=km.get_disease_markup(message.chat.id))
@@ -180,7 +180,7 @@ def change_lang(message: Message or CallbackQuery):
     if type(message) is CallbackQuery:
         message = message.message
     application.send_message(message.chat.id,
-                             lang_util.get_translated_message("**Change Language**", message.chat.id),
+                             lang_util.get_translated_message("__Change Language__", message.chat.id),
                              parse_mode="MarkdownV2")
     application.send_message(message.chat.id, "Please choose your preferred language.",
                              reply_markup=km.get_language_selection_markup())
@@ -195,7 +195,7 @@ def send_pant_image(id, sci_name):
 @application.callback_query_handler(func=lambda call: "predict" in call.data)
 def predict(call: CallbackQuery):
     application.send_message(call.message.chat.id,
-                             lang_util.get_translated_message("**Identify a herb**", call.message.chat.id), parse_mode="MarkdownV2")
+                             lang_util.get_translated_message("__Identify a herb__", call.message.chat.id), parse_mode="MarkdownV2")
     application.send_message(call.message.chat.id,
                              lang_util.get_translated_message("Please send a photograph of the plant.", call.message.chat.id))
 
