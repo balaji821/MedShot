@@ -40,9 +40,9 @@ plant_flag = False
 @application.message_handler(commands=["menu"])
 def menu(message):
     application.send_message(message.chat.id,
-                             "`|          `*__☘" +
+                             "`|          `☘*__" +
                              lang_util.get_translated_message("MENU", message.chat.id) +
-                             "☘__*`          |`",
+                             "__*☘`          |`",
                              reply_markup=km.get_menu_markup(message.chat.id), parse_mode="MarkdownV2")
 
 
@@ -126,6 +126,7 @@ def plant_info(message: Message):
         application.send_message(id,
                                  lang_util.get_translated_message("Herb not found! Please select one from the list.", id),
                                  reply_markup=km.get_plant_list_markup(id))
+        return
     plant_name = plant_name.split("/")[1]
     print(plant_name)
     plant_name = plants_util.get_plant_common_name(plant_name,lang_util.get_preferred_language(message.chat.id))
@@ -147,12 +148,18 @@ def send_plant_info(plant, id, send_plant_image):
                                  reply_markup=km.get_plant_list_markup(id))
         return
     logger.info(str(id) + " requested info on" + plant)
+    application.send_message(id,
+                             "`|          `🍃*__" +
+                             lang_util.get_translated_message(plant, id) +
+                             "__*🍃`          |`", parse_mode="MarkdownV2")
     if not plant == 'None' and not send_plant_image:
         send_pant_image(id,
                         plants_util.get_plant_sci_name_with_common_name(plant, lang_util.get_preferred_language(id)))
     message_to_send = lang_util.get_translated_message(
         plants_util.get_info(plant, lang_util.get_preferred_language(id)),
         id)
+    information_heading = lang_util.get_translated_message("Information", id)
+    message_to_send = "`|          `👇🏻*__" + information_heading + "__*👇🏻`          |`\n" + ("--"*10) + message_to_send
     application.send_audio(id, to_speech(message_to_send, id, language=lang_util.get_preferred_language(id)))
     application.send_message(id, message_to_send, reply_markup=km.get_plant_info_markup(plant, id))
 
