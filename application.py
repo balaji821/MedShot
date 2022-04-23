@@ -158,9 +158,9 @@ def send_plant_info(plant, id, send_plant_image):
                                  reply_markup=km.get_plant_list_markup(id))
         return
     logger.info(str(id) + " requested info on" + plant)
-    plant_heading = "`          `👇🏻__" + \
+    plant_heading = "`          `🍃*__" + \
                     lang_util.get_translated_message(plant, id) + \
-                    "__*👇🏻`       ‎`\n"
+                    "__*🍃`       ‎`\n"
     application.send_message(id, plant_heading, parse_mode="MarkdownV2")
     if not plant == 'None' and not send_plant_image:
         send_pant_image(id,
