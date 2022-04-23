@@ -35,7 +35,9 @@ def get_plant_list_markup(id):
     for plant in Plants.get_instance().get_plant_list(lang):
         if plant == "None":
             continue
-        markup.add(KeyboardButton(langs.get_translated_message(plant, id)))
+        markup.add(KeyboardButton(langs.get_translated_message(plant, id) + "/" +
+                                  Plants.get_instance().get_plant_sci_name_with_common_name(plant,
+                                                                                            langs.get_preferred_language(id))))
     return markup
 
 

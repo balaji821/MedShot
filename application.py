@@ -120,6 +120,13 @@ def get_medication(message: Message):
 
 @application.message_handler(func=get_plant_flag)
 def plant_info(message: Message):
+    plant_name = message.text
+    if '/' not in plant_name:
+        application.send_message(id,
+                                 lang_util.get_translated_message("Herb not found! Please select one from the list.", id),
+                                 reply_markup=km.get_plant_list_markup(id))
+    plant_name = plant_name.split("/")[1]
+    plant_name = plants_util.get_plant_common_name(plant_name,lang_util.get_preferred_language(message.chat.id))
     send_plant_info(message.text, message.chat.id, True)
     menu(message)
 
@@ -134,7 +141,7 @@ def plant_info(message: Message):
 def send_plant_info(plant, id, send_plant_image):
     if plant not in plants_util.get_plant_list(lang_util.get_preferred_language(id)):
         application.send_message(id,
-                                 lang_util.get_translated_message("Herb not recognized! Please select one from the list.", id),
+                                 lang_util.get_translated_message("Herb not found! Please select one from the list.", id),
                                  reply_markup=km.get_plant_list_markup(id))
         return
     logger.info(str(id) + " requested info on" + plant)
