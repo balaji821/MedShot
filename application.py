@@ -10,6 +10,11 @@ from telebot.types import Message, CallbackQuery, ReplyKeyboardRemove
 from gtts import gTTS
 from urllib.parse import unquote_plus
 
+# /menu - lists all available functionalities in the form of buttons.
+# /info - get information on a particular plant.
+# /medication - get plants that can cure a particular disease/problem.
+# /lang - change the bot language.
+
 logging.basicConfig(
     filename=fu.get_log_directory() + "out.log",
     level=logging.DEBUG,
