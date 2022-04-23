@@ -149,9 +149,9 @@ def send_plant_info(plant, id, send_plant_image):
         return
     logger.info(str(id) + " requested info on" + plant)
     application.send_message(id,
-                             "`|          `🍃*__" +
+                             "`          `🍃*__" +
                              lang_util.get_translated_message(plant, id) +
-                             "__*🍃`          |`", parse_mode="MarkdownV2")
+                             "__*🍃`          `", parse_mode="MarkdownV2")
     if not plant == 'None' and not send_plant_image:
         send_pant_image(id,
                         plants_util.get_plant_sci_name_with_common_name(plant, lang_util.get_preferred_language(id)))
@@ -159,9 +159,12 @@ def send_plant_info(plant, id, send_plant_image):
         plants_util.get_info(plant, lang_util.get_preferred_language(id)),
         id)
     information_heading = lang_util.get_translated_message("Information", id)
-    message_to_send = "`|          `👇🏻*__" + information_heading + "__*👇🏻`          |`\n" + ("--"*10) + message_to_send
+    uses_heading = lang_util.get_translated_message("Uses", id)
+    message_to_send = "`|          `👇🏻*__" + information_heading + "__*👇🏻`          |`\n" + ("--"*20) + message_to_send
+    application.send_message(id, message_to_send, parse_mode="MarkdownV2")
     application.send_audio(id, to_speech(message_to_send, id, language=lang_util.get_preferred_language(id)))
-    application.send_message(id, message_to_send, reply_markup=km.get_plant_info_markup(plant, id))
+    application.send_message(id, "`|          `*__" + uses_heading + "__*`          |`\n",
+                             reply_markup=km.get_plant_info_markup(plant, id))
 
 
 @application.callback_query_handler(func=lambda call: "use;" in call.data)

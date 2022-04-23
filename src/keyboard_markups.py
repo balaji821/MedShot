@@ -4,12 +4,12 @@ from src.plant_utils import Plants
 from src.disease_utils import Disease
 
 menu = {"1. Identify a herb ": "predict",
-        "2. Find medication for a disease ": "medication",
+        "2. Find medication for disease ": "medication",
         "3. Get information on a herb ": "info",
         "4. Change Language ": "change_lang"}
 
 emojis = {"1. Identify a herb ": "📸",
-          "2. Find medication for a disease ": "🔍",
+          "2. Find medication for disease ": "🔍",
           "3. Get information on a herb ": "🌱",
           "4. Change Language ": "🗣"}
 
