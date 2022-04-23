@@ -160,7 +160,7 @@ def send_plant_info(plant, id, send_plant_image):
         id)
     information_heading = lang_util.get_translated_message("Information", id)
     uses_heading = lang_util.get_translated_message("Uses", id)
-    message_to_send = "`|          `👇🏻*__" + information_heading + "__*👇🏻`          |`\n" + ("--"*20) + message_to_send
+    message_to_send = "`|          `👇🏻*__" + information_heading + "__*👇🏻`          |`\n" + ("__"*20) + message_to_send
     application.send_message(id, message_to_send, parse_mode="MarkdownV2")
     application.send_audio(id, to_speech(message_to_send, id, language=lang_util.get_preferred_language(id)))
     application.send_message(id, "`|          `*__" + uses_heading + "__*`          |`\n",
