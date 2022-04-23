@@ -57,8 +57,8 @@ def get_medication_flag(message: Message):
 
 
 def get_plant_flag(message: Message):
-    global medication_flag
-    return medication_flag
+    global plant_flag
+    return plant_flag
 
 
 def to_speech(text, chat_id, language='en'):
@@ -175,7 +175,7 @@ def info_command(message: Message or CallbackQuery):
                              lang_util.get_translated_message("__Get information on a herb__", message.chat.id),
                              parse_mode="MarkdownV2")
     application.send_message(message.chat.id,
-                             lang_util.get_translated_message("Select from the list of available herbs",message.chat.id),
+                             lang_util.get_translated_message("Select from the list of herbs given below", message.chat.id),
                              reply_markup=km.get_plant_list_markup(message.chat.id))
     global plant_flag
     plant_flag = True
