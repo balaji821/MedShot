@@ -186,6 +186,7 @@ def send_plant_info(plant, id, send_plant_image):
 def plant_use_info(call: CallbackQuery):
     common_name = call.data.split(";")[1]
     use_case = call.data.split(";")[2]
+    use_case = use_case.replace("+","-")
     message = plants_util.get_info(common_name, lang_util.get_preferred_language(call.message.chat.id), use_case)
     message = lang_util.get_translated_message(message, call.message.chat.id)
     use_heading = "`          `__" + lang_util.get_translated_message(use_case,call.message.chat.id) +"__`       ‎`\n"

@@ -53,7 +53,7 @@ def get_plant_info_markup(plant_name, id):
     i = 0
     while i < len(uses) - 1:
         markup.add(InlineKeyboardButton(langs.get_translated_message(uses[i].replace("_", " "), id),
-                                        callback_data="use;" + plant_name + ";" + uses[i]),
+                                        callback_data="use;" + plant_name + ";" + uses[i].replace("-", "+")),
                    InlineKeyboardButton(langs.get_translated_message(uses[i + 1].replace("_", " "), id),
                                         callback_data="use;" + plant_name + ";" + uses[i + 1])
                    )
