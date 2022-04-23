@@ -190,7 +190,8 @@ def plant_use_info(call: CallbackQuery):
     use_case = unquote_plus(use_case)
     message = plants_util.get_info(common_name, lang_util.get_preferred_language(call.message.chat.id), use_case)
     message = lang_util.get_translated_message(message, call.message.chat.id)
-    use_heading = "__" + lang_util.get_translated_message(use_case, call.message.chat.id).replace("-", "\-") + "__"
+    use_heading = "__" + lang_util.get_translated_message(use_case, call.message.chat.id)\
+        .replace("-", "\-").replace("_", " ") + "__"
     application.send_message(call.message.chat.id, use_heading, parse_mode="MarkdownV2")
     application.send_message(call.message.chat.id, message)
     application.send_audio(call.message.chat.id, to_speech(message, call.message.chat.id,
