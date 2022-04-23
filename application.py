@@ -140,7 +140,6 @@ def plant_info(message: Message):
     print(plant_name)
     plant_name = plants_util.get_plant_common_name(plant_name, lang_util.get_preferred_language(message.chat.id))
     send_plant_info(plant_name, message.chat.id, True)
-    menu(message)
 
     global set_lang_flag
     global medication_flag
@@ -271,7 +270,6 @@ def document_error(message: Message):
     application.send_message(message.chat.id, lang_util.get_translated_message(
         "Please send image as a photo (_Tip: Choose image from your gallery_)", message.chat.id),
                              parse_mode="MarkdownV2")
-    menu(message)
 
 
 def download_image(message: Message):
