@@ -245,7 +245,7 @@ def change_lang(message: Message or CallbackQuery):
     if type(message) is CallbackQuery:
         message = message.message
     application.send_message(message.chat.id,
-                             lang_util.get_translated_message("__Change Language__", message.chat.id),
+                             "__Change Language__",
                              parse_mode="MarkdownV2")
     application.send_message(message.chat.id, "Please choose your preferred language.",
                              reply_markup=km.get_language_selection_markup())
