@@ -39,10 +39,10 @@ medication_flag = False
 @application.message_handler(commands=["menu"])
 def menu(message):
     application.send_message(message.chat.id,
-                             "`|          `<h1>☘" +
+                             "`|          `*__☘" +
                              lang_util.get_translated_message("MENU", message.chat.id) +
-                             "☘</h1>`          |`",
-                             reply_markup=km.get_menu_markup(message.chat.id), parse_mode="html")
+                             "☘__*`          |`",
+                             reply_markup=km.get_menu_markup(message.chat.id), parse_mode="MarkdownV2")
 
 
 def set_lang_condition(message: Message):
