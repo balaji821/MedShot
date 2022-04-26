@@ -37,13 +37,8 @@ def get_lang_code(lang_name):
     return lang_code_map[lang_name]
 
 
-def get_translated_message(message, chat_id):
-    lang = get_preferred_language(chat_id)
-    if message in translation_cache:
-        translation: dict = translation_cache[message]
-        if lang in translation:
-            return translation[lang]
-    translator = get_translator(lang)
+def translate(message, language):
+    translator = get_translator(language)
     translated_message: str = ""
     if len(message) < 5000:
         translated_message = translator.translate(message)
@@ -51,8 +46,21 @@ def get_translated_message(message, chat_id):
         for i in range(len(message)//5000):
             batch = message[i*5000:(i+1)*5000]
             translated_message += translator.translate(batch)
-    translation_cache[message][lang] = translated_message
     return translated_message
+
+
+def get_translated_message(message, chat_id):
+    lang = get_preferred_language(chat_id)
+    if message in translation_cache:
+        translation: dict = translation_cache[message]
+        if lang in translation:
+            return translation[lang]
+        else:
+            translation[lang] = translate(message, lang)
+            return translation[lang]
+    else:
+        translation_cache[message] = {lang: translate(message, lang)}
+        return translation_cache[message][lang]
 
 
 def get_preferred_language(chat_id):
