@@ -1,5 +1,6 @@
 import telebot
 import logging
+import os
 import src.file_utils as fu
 import src.keyboard_markups as km
 import src.model_utils as model
@@ -74,10 +75,11 @@ def get_plant_flag(message: Message):
     return message.chat.id in plant_flag
 
 
-def to_speech(text, chat_id, language='en'):
-    output_path = fu.get_audio_path() + str(chat_id) + ".mp3"
-    output = gTTS(text=text, lang=language, slow=False)
-    output.save(output_path)
+def to_speech(text, file_name, language='en'):
+    output_path = fu.get_audio_path() + file_name + "_" + language + ".mp3"
+    if not os.path.exists(output_path):
+        output = gTTS(text=text, lang=language, slow=False)
+        output.save(output_path)
     return open(output_path, 'rb')
 
 
@@ -195,7 +197,7 @@ def send_plant_info(plant, id, send_plant_image):
     application.send_message(id, info_heading, parse_mode="MarkdownV2")
     application.send_message(id, message_to_send)
     application.send_audio(id,
-                           to_speech(message_to_send, id, language=lang_util.get_preferred_language(id)),
+                           to_speech(message_to_send, plant, language=lang_util.get_preferred_language(id)),
                            reply_markup=ReplyKeyboardRemove())
     application.send_message(id, uses_heading, reply_markup=km.get_plant_info_markup(plant, id),
                              parse_mode="MarkdownV2")
@@ -212,7 +214,7 @@ def plant_use_info(call: CallbackQuery):
         .replace("-", "\-").replace("_", " ") + "__`       ‎`\n"
     application.send_message(call.message.chat.id, use_heading, parse_mode="MarkdownV2")
     application.send_message(call.message.chat.id, message)
-    application.send_audio(call.message.chat.id, to_speech(message, call.message.chat.id,
+    application.send_audio(call.message.chat.id, to_speech(message, use_case,
                                                            language=lang_util.get_preferred_language(
                                                                call.message.chat.id)))
 
