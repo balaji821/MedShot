@@ -1,20 +1,24 @@
 from deep_translator import GoogleTranslator
 from configparser import ConfigParser
+from pandas import DataFrame
 
 config: ConfigParser
 lang_code_map: dict
 lang_list: list
+translation_cache: dict
 
 
 def init(cfg):
     global config
     global lang_code_map
     global lang_list
+    global translation_cache
     config = cfg
     lang_list = GoogleTranslator().get_supported_languages()
     lang_code_map = GoogleTranslator().get_supported_languages(as_dict=True)
     for lang in lang_list:
         lang_code_map[lang_code_map[lang]] = lang
+    translation_cache = {}
 
 
 def get_all_langs():
@@ -35,17 +39,19 @@ def get_lang_code(lang_name):
 
 def get_translated_message(message, chat_id):
     lang = get_preferred_language(chat_id)
-    if lang == 'en':
-        return message
+    if message in translation_cache:
+        translation: dict = translation_cache[message]
+        if lang in translation:
+            return translation[lang]
     translator = get_translator(lang)
+    translated_message: str = ""
     if len(message) < 5000:
         translated_message = translator.translate(message)
     else:
-        translated_message: str = ""
-        for i in range(len(message)/5000):
+        for i in range(len(message)//5000):
             batch = message[i*5000:(i+1)*5000]
             translated_message += translator.translate(batch)
-
+    translation_cache[message][lang] = translated_message
     return translated_message
 
 
