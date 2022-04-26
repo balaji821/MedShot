@@ -38,9 +38,9 @@ model.load_model(download_model, download_url)
 plants_util = Plants.get_instance()
 disease_util = Disease.get_instance()
 
-set_lang_flag = False
-medication_flag = False
-plant_flag = False
+lang_flag: list = []
+medication_flag: list = []
+plant_flag: list = []
 
 
 @application.message_handler(commands=["start"])
@@ -60,18 +60,18 @@ def menu(message):
 
 
 def get_lang_condition(message: Message):
-    global set_lang_flag
-    return set_lang_flag
+    global lang_flag
+    return message.chat.id in lang_flag
 
 
 def get_medication_flag(message: Message):
     global medication_flag
-    return medication_flag
+    return message.chat.id in medication_flag
 
 
 def get_plant_flag(message: Message):
     global plant_flag
-    return plant_flag
+    return message.chat.id in plant_flag
 
 
 def to_speech(text, chat_id, language='en'):
@@ -94,12 +94,15 @@ def set_language(message: Message):
 
     fu.update_language_resources(config)
 
-    global set_lang_flag
+    global lang_flag
     global medication_flag
     global plant_flag
-    set_lang_flag = False
-    medication_flag = False
-    plant_flag = False
+    if message.chat.id in lang_flag:
+        lang_flag.remove(message.chat.id)
+    if message.chat.id in medication_flag:
+        medication_flag.remove(message.chat.id)
+    if message.chat.id in plant_flag:
+        plant_flag.remove(message.chat.id)
 
     application.send_message(message.chat.id,
                              lang_util.get_translated_message("Language set to " + lang_util.get_lang_name(lang_code),
@@ -127,12 +130,15 @@ def get_medication(message: Message):
                                                               message.chat.id),
                              reply_markup=km.get_medication_markup(disease, message.chat.id))
 
-    global set_lang_flag
+    global lang_flag
     global medication_flag
     global plant_flag
-    set_lang_flag = False
-    medication_flag = False
-    plant_flag = False
+    if message.chat.id in lang_flag:
+        lang_flag.remove(message.chat.id)
+    if message.chat.id in medication_flag:
+        medication_flag.remove(message.chat.id)
+    if message.chat.id in plant_flag:
+        plant_flag.remove(message.chat.id)
 
 
 @application.message_handler(func=get_plant_flag)
@@ -150,12 +156,15 @@ def plant_info(message: Message):
     plant_name = plants_util.get_plant_common_name(plant_name, lang_util.get_preferred_language(message.chat.id))
     send_plant_info(plant_name, message.chat.id, True)
 
-    global set_lang_flag
+    global lang_flag
     global medication_flag
     global plant_flag
-    set_lang_flag = False
-    medication_flag = False
-    plant_flag = False
+    if message.chat.id in lang_flag:
+        lang_flag.remove(message.chat.id)
+    if message.chat.id in medication_flag:
+        medication_flag.remove(message.chat.id)
+    if message.chat.id in plant_flag:
+        plant_flag.remove(message.chat.id)
 
 
 def send_plant_info(plant, id, send_plant_image):
@@ -221,7 +230,7 @@ def info_command(message: Message or CallbackQuery):
                                                               message.chat.id),
                              reply_markup=km.get_plant_list_markup(message.chat.id))
     global plant_flag
-    plant_flag = True
+    plant_flag.append(message.chat.id)
 
 
 @application.callback_query_handler(func=lambda call: call.data == "medication")
@@ -236,7 +245,7 @@ def get_medication(message: Message or CallbackQuery):
                              reply_markup=km.get_disease_markup(message.chat.id))
 
     global medication_flag
-    medication_flag = True
+    medication_flag.append(message.chat.id)
 
 
 @application.message_handler(commands=["lang"])
@@ -249,8 +258,8 @@ def change_lang(message: Message or CallbackQuery):
                              parse_mode="MarkdownV2")
     application.send_message(message.chat.id, "Please choose your preferred language.",
                              reply_markup=km.get_language_selection_markup())
-    global set_lang_flag
-    set_lang_flag = True
+    global lang_flag
+    lang_flag.append(message.chat.id)
 
 
 def send_pant_image(id, sci_name):
