@@ -38,6 +38,8 @@ def get_lang_code(lang_name):
 
 
 def translate(message, language):
+    if language == 'en':
+        return message
     translator = get_translator(language)
     translated_message: str = ""
     if len(message) < 5000:
